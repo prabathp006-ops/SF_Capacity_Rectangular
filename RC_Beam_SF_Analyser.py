@@ -81,24 +81,28 @@ def beam_reinforcement_diagram(
 # ---------------- Streamlit App ----------------
 st.title("Beam Reinforcement Cross-Section")
 
-beam_width = st.number_input("Beam Width b (mm)", min_value=100, max_value=1000, value=300)
-beam_depth = st.number_input("Beam Depth d (mm)", min_value=200, max_value=2000, value=500)
-num_bottom_bars = st.number_input("Number of Bottom Bars", min_value=1, max_value=10, value=4)
-num_top_bars = st.number_input("Number of Top Bars", min_value=0, max_value=10, value=0)
-main_bar_dia = st.number_input("Main Bar Diameter (mm)", min_value=8, max_value=40, value=20)
-cover = st.number_input("Clear Cover (mm)", min_value=20, max_value=75, value=40)
+# Create two columns: inputs left, figure right
+col1, col2 = st.columns([1, 2])
 
-fig = beam_reinforcement_diagram(
-    beam_width,
-    beam_depth,
-    num_bottom_bars,
-    num_top_bars,
-    main_bar_dia,
-    cover
-)
+with col1:
+    beam_width = st.number_input("Beam Width b (mm)", min_value=100, max_value=1000, value=300)
+    beam_depth = st.number_input("Beam Depth d (mm)", min_value=200, max_value=2000, value=500)
+    num_bottom_bars = st.number_input("Number of Bottom Bars", min_value=1, max_value=10, value=4)
+    num_top_bars = st.number_input("Number of Top Bars", min_value=0, max_value=10, value=0)
+    main_bar_dia = st.number_input("Main Bar Diameter (mm)", min_value=8, max_value=40, value=20)
+    cover = st.number_input("Clear Cover (mm)", min_value=20, max_value=75, value=40)
 
-st.pyplot(fig)
-############################
+with col2:
+    fig = beam_reinforcement_diagram(
+        beam_width,
+        beam_depth,
+        num_bottom_bars,
+        num_top_bars,
+        main_bar_dia,
+        cover
+    )
+    st.pyplot(fig)
+####################################################################################
 # draw beam and rebar diagrams
 def draw_beam_with_rebars(width, height, num_rebars, cover, bar_dia):
     fig, ax = plt.subplots(figsize=(4, 3))  # compact figure
