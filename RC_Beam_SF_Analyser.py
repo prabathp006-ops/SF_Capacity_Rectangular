@@ -14,6 +14,91 @@ import streamlit as st
 # title document
 st.title("Shear Capacity of Rectangular Reinforced Concrete Sections - AASHTO LRFD 10th Edition")
 
+
+import streamlit as st
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+
+def beam_reinforcement_diagram(
+    beam_width,
+    beam_depth,
+    num_bottom_bars,
+    num_top_bars,
+    main_bar_dia,
+    cover
+):
+    """Draws a beam cross-section reinforcement diagram like the reference figure."""
+
+    fig, ax = plt.subplots(figsize=(6, 8))
+
+    # Beam outline
+    beam = patches.Rectangle((0, 0), beam_width, beam_depth,
+                             linewidth=2, edgecolor='black', facecolor='none')
+    ax.add_patch(beam)
+
+    # Stirrup (closed rectangle inside beam)
+    stirrup = patches.Rectangle(
+        (cover, cover),
+        beam_width - 2*cover,
+        beam_depth - 2*cover,
+        linewidth=2,
+        edgecolor='red',
+        facecolor='none'
+    )
+    ax.add_patch(stirrup)
+
+    # Bottom reinforcement bars
+    spacing_bottom = (beam_width - 2*cover) / (num_bottom_bars - 1) if num_bottom_bars > 1 else 0
+    for i in range(num_bottom_bars):
+        x = cover + i * spacing_bottom
+        y = cover
+        circ = plt.Circle((x, y), main_bar_dia/2, color='red')
+        ax.add_patch(circ)
+
+    # Top reinforcement bars (optional)
+    if num_top_bars > 0:
+        spacing_top = (beam_width - 2*cover) / (num_top_bars - 1) if num_top_bars > 1 else 0
+        for i in range(num_top_bars):
+            x = cover + i * spacing_top
+            y = beam_depth - cover
+            circ = plt.Circle((x, y), main_bar_dia/2, color='red')
+            ax.add_patch(circ)
+
+    # Labels for dimensions
+    ax.text(beam_width/2, -30, "b", ha="center", fontsize=12)
+    ax.text(-30, beam_depth/2, "d", va="center", fontsize=12)
+
+    # Formatting
+    ax.set_xlim(-50, beam_width + 50)
+    ax.set_ylim(-50, beam_depth + 50)
+    ax.set_aspect('equal', adjustable='box')
+    ax.axis('off')
+    plt.title("Beam Cross-Section Reinforcement")
+
+    return fig
+
+
+# ---------------- Streamlit App ----------------
+st.title("Beam Reinforcement Cross-Section")
+
+beam_width = st.number_input("Beam Width b (mm)", min_value=100, max_value=1000, value=300)
+beam_depth = st.number_input("Beam Depth d (mm)", min_value=200, max_value=2000, value=500)
+num_bottom_bars = st.number_input("Number of Bottom Bars", min_value=1, max_value=10, value=4)
+num_top_bars = st.number_input("Number of Top Bars", min_value=0, max_value=10, value=0)
+main_bar_dia = st.number_input("Main Bar Diameter (mm)", min_value=8, max_value=40, value=20)
+cover = st.number_input("Clear Cover (mm)", min_value=20, max_value=75, value=40)
+
+fig = beam_reinforcement_diagram(
+    beam_width,
+    beam_depth,
+    num_bottom_bars,
+    num_top_bars,
+    main_bar_dia,
+    cover
+)
+
+st.pyplot(fig)
+############################
 # draw beam and rebar diagrams
 def draw_beam_with_rebars(width, height, num_rebars, cover, bar_dia):
     fig, ax = plt.subplots(figsize=(4, 3))  # compact figure
