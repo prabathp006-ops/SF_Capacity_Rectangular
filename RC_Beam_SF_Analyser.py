@@ -27,7 +27,7 @@ def beam_reinforcement_diagram(
     main_bar_dia,
     cover
 ):
-    """Draws a beam cross-section reinforcement diagram like the reference figure."""
+    """Draws a beam cross-section reinforcement diagram with stirrup enclosing all bars."""
 
     fig, ax = plt.subplots(figsize=(6, 8))
 
@@ -36,7 +36,7 @@ def beam_reinforcement_diagram(
                              linewidth=2, edgecolor='black', facecolor='none')
     ax.add_patch(beam)
 
-    # Stirrup (closed rectangle inside beam)
+    # Stirrup (closed rectangle inside beam, enclosing all bars)
     stirrup = patches.Rectangle(
         (cover, cover),
         beam_width - 2*cover,
@@ -55,7 +55,7 @@ def beam_reinforcement_diagram(
         circ = plt.Circle((x, y), main_bar_dia/2, color='red')
         ax.add_patch(circ)
 
-    # Top reinforcement bars (optional)
+    # Top reinforcement bars
     if num_top_bars > 0:
         spacing_top = (beam_width - 2*cover) / (num_top_bars - 1) if num_top_bars > 1 else 0
         for i in range(num_top_bars):
@@ -64,7 +64,7 @@ def beam_reinforcement_diagram(
             circ = plt.Circle((x, y), main_bar_dia/2, color='red')
             ax.add_patch(circ)
 
-    # Labels for dimensions
+    # Dimension labels
     ax.text(beam_width/2, -30, "b", ha="center", fontsize=12)
     ax.text(-30, beam_depth/2, "d", va="center", fontsize=12)
 
@@ -81,7 +81,6 @@ def beam_reinforcement_diagram(
 # ---------------- Streamlit App ----------------
 st.title("Beam Reinforcement Cross-Section")
 
-# Create two columns: inputs left, figure right
 col1, col2 = st.columns([1, 2])
 
 with col1:
