@@ -27,7 +27,7 @@ def beam_reinforcement_diagram(
     main_bar_dia,
     cover
 ):
-    """Draws a beam cross-section reinforcement diagram with stirrup enclosing all bars."""
+    """Beam cross-section with stirrup enclosing all bars."""
 
     fig, ax = plt.subplots(figsize=(6, 8))
 
@@ -36,7 +36,7 @@ def beam_reinforcement_diagram(
                              linewidth=2, edgecolor='black', facecolor='none')
     ax.add_patch(beam)
 
-    # Stirrup (closed rectangle inside beam, enclosing all bars)
+    # Stirrup (closed rectangle enclosing all bars)
     stirrup = patches.Rectangle(
         (cover, cover),
         beam_width - 2*cover,
@@ -67,6 +67,7 @@ def beam_reinforcement_diagram(
     # Dimension labels
     ax.text(beam_width/2, -30, "b", ha="center", fontsize=12)
     ax.text(-30, beam_depth/2, "d", va="center", fontsize=12)
+    ax.text(beam_width/2, cover-20, "Aₛ", ha="center", fontsize=12, color="red")
 
     # Formatting
     ax.set_xlim(-50, beam_width + 50)
