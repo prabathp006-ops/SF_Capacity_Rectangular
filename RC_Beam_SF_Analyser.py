@@ -12,7 +12,7 @@ from IPython.display import display
 import streamlit as st
 
 # title document
-st.title("Moment Capacity of Rectangular Singly Reinforced Concrete Sections - AASHTO LRFD 10th Edition")
+st.title("Shear Capacity of Rectangular Reinforced Concrete Sections - AASHTO LRFD 10th Edition")
 
 # draw beam and rebar diagrams
 def draw_beam_with_rebars(width, height, num_rebars, cover, bar_dia):
